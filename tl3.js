@@ -23,13 +23,12 @@ const getTrainNumbers = async(trainCode, trainDate)=>{
     // load trains for station
     let urlSearch = tlConfig.URL_SEARCH.replace("$1",trainCode).replace("$2", trainDate);
     let rdata = await tlGet(urlSearch);
-
+    console.log(urlSearch);
     try {
         rdata = JSON.parse(rdata);        
         if (rdata?.data) return rdata.data;
     } catch (error) {
-        console.log(error);
-        console.log(rdata);
+        console.log(error, trainCode, trainDate);
     }
     return null;
 };
@@ -44,7 +43,7 @@ const loadTrainNumbers = async()=>{
     // console.log(tlist); return;
 
     // query station's trains by request 12306
-    let tdate = new Date(Date.now() + 86400*1000 + new Date().getTimezoneOffset()*1000*1000).toISOString().slice(0,10).replaceAll("-","");
+    let tdate = new Date(Date.now() + 86400*1000 - new Date().getTimezoneOffset()*60*1000).toISOString().slice(0,10).replaceAll("-","");
 
     for(const train of tlist) {
         await sleep(2000 + Math.random() * 2000);
